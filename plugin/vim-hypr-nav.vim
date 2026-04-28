@@ -45,7 +45,8 @@ endif
 " Function to be called remotely by the helper script.
 function VimHyprNav(dir)
     let l:dir_flag = get({"l": "h", "d": "j", "u": "k", "r": "l"}, a:dir)
-    if winnr(l:dir_flag) == winnr()
+    let l:btype = getwinvar(winnr(l:dir_flag), '&buftype')
+    if winnr(l:dir_flag) == winnr() || (l:btype != '' && l:btype != 'terminal' && l:btype != 'help')
         call s:job(["hyprctl", "dispatch", "movefocus", a:dir])
     else
         execute "wincmd " . l:dir_flag
